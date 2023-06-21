@@ -22,7 +22,7 @@ CUDA_VISIBLE_DEVICES=0 fairseq-train $IWSLT_BI_DATA_BIN \
     --lr 5e-4 --lr-scheduler inverse_sqrt --warmup-updates 4000 \
     --dropout 0.3 --weight-decay 0.0001 \
     --criterion label_smoothed_cross_entropy_with_simcut --alpha 3.0 --p 0.05 --label-smoothing 0.1 \
-    --max-tokens 4096 --fp16 --no-epoch-checkpoints --save-dir $CHECKPOINT_DIR \
+    --max-tokens 4096 --no-epoch-checkpoints --save-dir $CHECKPOINT_DIR \
     --seed $SEED \
     1>$LOG_DIR/log.out 2>$LOG_DIR/log.err
 
@@ -51,7 +51,7 @@ CUDA_VISIBLE_DEVICES=0 fairseq-train $IWSLT_UNI_DATA_BIN \
     --dropout 0.3 --weight-decay 0.0001 \
     --criterion label_smoothed_cross_entropy_with_simcut --alpha 3.0 --p 0.05 --label-smoothing 0.1 \
     --reset-optimizer --reset-meters --reset-dataloader --reset-lr-scheduler --restore-file $CKPT \
-    --max-tokens 4096 --fp16 --no-epoch-checkpoints --save-dir $CHECKPOINT_DIR \
+    --max-tokens 4096 --no-epoch-checkpoints --save-dir $CHECKPOINT_DIR \
     --seed $SEED \
     1>$LOG_DIR/log.out 2>$LOG_DIR/log.err
 
