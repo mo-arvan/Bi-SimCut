@@ -1,0 +1,53 @@
+FROM pytorch/pytorch:1.4-cuda10.1-cudnn7-runtime
+
+
+RUN apt update && apt install wget
+
+COPY . /scratch
+
+
+RUN mkdir /dataset
+WORKDIR /dataset
+
+RUN . /scratch/artifacts/prepare-iwslt14.sh
+
+
+WORKDIR /scratch/fairseq
+
+
+RUN pip install --upgrade pip && \
+    pip install --upgrade numpy && \
+    pip install --editable ./
+
+
+
+ENV IWSLT_DATA=/dataset/iwslt14.tokenized.de-en
+ENV IWSLT_DATA_BIN=/dataset_bin
+ENV IWSLT_UNI_DATA_BIN=$IWSLT_DATA_BIN/iwslt14.tokenized.de-en
+ENV IWSLT_BI_DATA_BIN=$IWSLT_DATA_BIN/iwslt14.tokenized.bidirection.de-en
+#
+RUN fairseq-preprocess --source-lang de --target-lang en \
+    --trainpref $IWSLT_DATA/train --validpref $IWSLT_DATA/valid --testpref $IWSLT_DATA/test \
+    --destdir $IWSLT_UNI_DATA_BIN \
+    --joined-dictionary --workers 20
+
+
+WORKDIR $IWSLT_DATA
+
+RUN cat train.en train.de > train.src && \
+    cat train.de train.en > train.tgt && \
+    cat valid.en valid.de > valid.src && \
+    cat valid.de valid.en > valid.tgt && \
+    cat test.en test.de > test.src && \
+    cat test.de test.en > test.tgt
+
+WORKDIR /scratch/fairseq
+
+RUN fairseq-preprocess --source-lang src --target-lang tgt \
+    --trainpref $IWSLT_DATA/train --validpref $IWSLT_DATA/valid --testpref $IWSLT_DATA/test \
+    --destdir $IWSLT_BI_DATA_BIN \
+    --srcdict $IWSLT_DATA_BIN/iwslt14.tokenized.de-en/dict.en.txt \
+    --tgtdict $IWSLT_DATA_BIN/iwslt14.tokenized.de-en/dict.de.txt --workers 20
+
+
+WORKDIR /workspace
