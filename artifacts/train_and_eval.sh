@@ -31,11 +31,6 @@ END_TIME=`date +%s`
 
 CKPT=$CHECKPOINT_DIR/checkpoint_best.pt
 
-
-
-EXP_UNI=iwslt14_de_en_simcut_alpha3_p005
-CKPT=$EXP_BI/checkpoint_best.pt
-
 CHECKPOINT_DIR=$EXP_UNI/checkpoints
 LOG_DIR=$EXP_UNI/logs
 
