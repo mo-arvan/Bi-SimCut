@@ -26,6 +26,13 @@ CUDA_VISIBLE_DEVICES=0 fairseq-train $IWSLT_BI_DATA_BIN \
     --seed $SEED \
     1>$LOG_DIR/log.out 2>$LOG_DIR/log.err
 
+RESULT=$?
+
+if [ $RESULT -ne 0 ]; then
+    echo "Training failed."
+    cat $LOG_DIR/log.err
+    exit
+fi
 
 END_TIME=`date +%s`
 
