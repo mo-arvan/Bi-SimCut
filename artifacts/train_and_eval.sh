@@ -3,7 +3,7 @@
 #export MODEL_DIR=model-save-dir-2
 #export SEED=1315 # MAKE SURE to update
 
-EXP=iwslt14_de_en_simcut_alpha3_p005
+#EXP=iwslt14_de_en_simcut_alpha3_p005
 
 EXP_BI=$EXP/bi
 EXP_UNI=$EXP/uni
